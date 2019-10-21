@@ -99,8 +99,15 @@ int main()
     }
    
     /*Echo server*/
+
+    /*
+        Since, unlike TCP, UDP is connectionless, so server
+        must know the address of client as well as the port
+        it is listening on in order to reach it
+    */
     sockAddr.set_ip_address(UDP_CLIENT_ADDR);
     sockAddr.set_port(UDP_CLIENT_PORT);
+
     while (1) {
         n = sock.recv((void*) recv_buf, sizeof(recv_buf));
         if (n > 0) 
@@ -111,7 +118,7 @@ int main()
             if (errcode < 0)
             {
                 printf("\n UDPSocket.sendto() fails, code: %d\n", errcode);
-                return -1;
+                break;
             }
             else 
             {
@@ -121,7 +128,7 @@ int main()
         else
         {
             printf("\n UDPSocket.recv() failed");
-            return -1;
+            break;
         }
     }
     
